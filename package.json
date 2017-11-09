@@ -9,13 +9,25 @@
     "vscode": "^1.3.0"
   },
   "categories": [
+    "Formatters",
     "Other"
   ],
   "activationEvents": [
     "*"
   ],
   "main": "./extension",
-  "contributes": {},
+  "contributes": {
+    "configuration": {
+      "title": "Fold Configuration",
+      "properties": {
+        "fold.level": {
+          "type": "number",
+          "default": 1,
+          "description": "Default fold level."
+        }
+      }
+    }
+  },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
