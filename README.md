@@ -1,2 +1,2 @@
 # Folded
-Visual Studio Code extension for automatic folding.
+Visual Studio Code extension for automatic folding 🃏.
