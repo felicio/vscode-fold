@@ -1,7 +1,7 @@
 {
-  "name": "vscode-folded",
-  "displayName": "Folded",
-  "description": "Visual Studio Code extension for automatic folding.",
+  "name": "vscode-fold",
+  "displayName": "Fold",
+  "description": "Visual Studio Code extension for automatic folding 🃏.",
   "version": "0.1.0",
   "publisher": "felicio",
   "engines": {
