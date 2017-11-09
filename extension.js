@@ -4,14 +4,18 @@ const vscode = require('vscode');
 
 const MAX_FOLD_LEVEL = 9;
 
-/** Activates extension on an emitted event. Invoked only once. */
+/**
+ * Activates extension on an emitted event. Invoked only once.
+ */
 exports.activate = context => {
   const subscription = vscode.workspace.onDidOpenTextDocument(listener);
 
   context.subscriptions.push(subscription);
 };
 
-/** Listens for text document `didOpen` event. */
+/**
+ * Listens for text document `didOpen` event.
+ */
 function listener() {
   const configuration = vscode.workspace.getConfiguration('fold');
   const level = configuration.get('level', 1);
@@ -19,7 +23,9 @@ function listener() {
   fold(level);
 }
 
-/** Recursively folds source code regions, except the region at the current cursor position. */
+/**
+ * Recursively folds source code regions, except the region at the current cursor position.
+ */
 function fold(level) {
   vscode.commands.executeCommand('editor.unfoldAll');
   vscode.commands.executeCommand(`editor.foldLevel${level}`);
