@@ -8,11 +8,11 @@ const MAX_FOLD_LEVEL = 9;
  * Activates extension on an emitted event. Invoked only once.
  */
 exports.activate = context => {
-  let textDocuments = vscode.workspace.textDocuments;
+  let documents = vscode.workspace.textDocuments;
 
   const subscription = vscode.workspace.onDidOpenTextDocument(document => {
-    const previousTextDocuments = textDocuments;
-    textDocuments = listener(document, previousTextDocuments);
+    const previousDocuments = documents;
+    documents = listener(document, previousDocuments);
   });
 
   context.subscriptions.push(subscription);
@@ -21,40 +21,30 @@ exports.activate = context => {
 /**
  * Listens for text document `didOpen` event.
  */
-function listener(document, previousTextDocuments) {
+function listener(activeDocument, previousDocuments) {
   const editor = vscode.window.activeTextEditor;
 
   if (editor) {
-    const textDocuments = vscode.workspace.textDocuments;
+    const documents = vscode.workspace.textDocuments;
     const activeFilePath = editor.document.fileName;
 
-    // FIXME: Do not call fold when and editor still holds a reference to the file (e.g. tab switching)
-    if (previousTextDocuments) {
-      const isOpen = previousTextDocuments.find(
-        previousDocument =>
-          previousDocument.fileName === document.fileName.replace(/\.git$/, '')
-      );
-
-      if (isOpen) {
-        return textDocuments;
-      }
+    /* Don't fold when editor still holds a reference to the document,
+    but return state of currently opened text documents. */
+    if (isOpened(activeDocument, previousDocuments)) {
+      return documents;
     }
 
-    /* The same event this funciton listens to gets also triggered on go to
-    definition of a symbol which should be ignored. */
-    if (
-      document.fileName === activeFilePath ||
-      document.fileName === `${activeFilePath}.git`
-    ) {
+    // Ignore events emitted by go to symbol definition feature.
+    if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
       const configuration = vscode.workspace.getConfiguration('fold');
       const level = configuration.get('level', 1);
 
       fold(level);
 
-      return textDocuments;
+      return documents;
     }
 
-    return previousTextDocuments;
+    return previousDocuments;
   }
 }
 
@@ -67,5 +57,19 @@ function fold(level) {
 
   for (let index = level + 1; index <= MAX_FOLD_LEVEL; index++) {
     vscode.commands.executeCommand(`editor.foldLevel${index}`);
+  }
+}
+
+/**
+ * Checks if text document is open.
+ */
+function isOpened(activeDocument, documents) {
+  if (documents) {
+    const document = documents.find(
+      document =>
+        document.fileName === activeDocument.fileName.replace(/\.git$/, '')
+    );
+
+    return document;
   }
 }
