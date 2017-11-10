@@ -8,7 +8,12 @@ const MAX_FOLD_LEVEL = 9;
  * Activates extension on an emitted event. Invoked only once.
  */
 exports.activate = context => {
-  const subscription = vscode.workspace.onDidOpenTextDocument(listener);
+  let textDocuments = vscode.workspace.textDocuments;
+
+  const subscription = vscode.workspace.onDidOpenTextDocument(document => {
+    const previousTextDocuments = textDocuments;
+    textDocuments = listener(document, previousTextDocuments);
+  });
 
   context.subscriptions.push(subscription);
 };
@@ -16,11 +21,24 @@ exports.activate = context => {
 /**
  * Listens for text document `didOpen` event.
  */
-function listener(document) {
+function listener(document, previousTextDocuments) {
   const editor = vscode.window.activeTextEditor;
 
   if (editor) {
+    const textDocuments = vscode.workspace.textDocuments;
     const activeFilePath = editor.document.fileName;
+
+    // FIXME: Do not call fold when and editor still holds a reference to the file (e.g. tab switching)
+    if (previousTextDocuments) {
+      const isOpen = previousTextDocuments.find(
+        previousDocument =>
+          previousDocument.fileName === document.fileName.replace(/\.git$/, '')
+      );
+
+      if (isOpen) {
+        return textDocuments;
+      }
+    }
 
     /* The same event this funciton listens to gets also triggered on go to
     definition of a symbol which should be ignored. */
@@ -31,10 +49,12 @@ function listener(document) {
       const configuration = vscode.workspace.getConfiguration('fold');
       const level = configuration.get('level', 1);
 
-      // FIXME: Do not call fold when and editor still holds a reference to the file (e.g. tab switching)
-      // TODO: Ignore files in `node_modules`, possibly expose as configuration
       fold(level);
+
+      return textDocuments;
     }
+
+    return previousTextDocuments;
   }
 }
 
