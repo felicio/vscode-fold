@@ -31,7 +31,8 @@ function listener(document) {
       const configuration = vscode.workspace.getConfiguration('fold');
       const level = configuration.get('level', 1);
 
-      // FIXME: Do not call when file is still open in an editor (e.g. tab switching)
+      // FIXME: Do not call fold when and editor still holds a reference to the file (e.g. tab switching)
+      // TODO: Ignore files in `node_modules`, possibly expose as configuration
       fold(level);
     }
   }
