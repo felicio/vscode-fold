@@ -2,12 +2,6 @@
   "version": "0.1.0",
   "configurations": [
     {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "program": "${file}"
-    },
-    {
       "name": "Extension",
       "type": "extensionHost",
       "request": "launch",

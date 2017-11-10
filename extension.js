@@ -16,16 +16,24 @@ exports.activate = context => {
 /**
  * Listens for text document `didOpen` event.
  */
-function listener(textDocument) {
-  const rootPath = vscode.workspace.rootPath;
+function listener(document) {
+  const editor = vscode.window.activeTextEditor;
 
-  /* The same event this funciton listens to gets also triggered on go to
-  definition of a symbol which should be ignored. */
-  if (textDocument.fileName.startsWith(rootPath)) {
-    const configuration = vscode.workspace.getConfiguration('fold');
-    const level = configuration.get('level', 1);
+  if (editor) {
+    const activeFilePath = editor.document.fileName;
 
-    fold(level);
+    /* The same event this funciton listens to gets also triggered on go to
+    definition of a symbol which should be ignored. */
+    if (
+      document.fileName === activeFilePath ||
+      document.fileName === `${activeFilePath}.git`
+    ) {
+      const configuration = vscode.workspace.getConfiguration('fold');
+      const level = configuration.get('level', 1);
+
+      // FIXME: Do not call when file is still open in an editor (e.g. tab switching)
+      fold(level);
+    }
   }
 }
 
