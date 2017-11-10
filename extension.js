@@ -16,11 +16,17 @@ exports.activate = context => {
 /**
  * Listens for text document `didOpen` event.
  */
-function listener() {
-  const configuration = vscode.workspace.getConfiguration('fold');
-  const level = configuration.get('level', 1);
+function listener(textDocument) {
+  const rootPath = vscode.workspace.rootPath;
 
-  fold(level);
+  /* The same event this funciton listens to gets also triggered on go to
+  definition of a symbol which should be ignored. */
+  if (textDocument.fileName.startsWith(rootPath)) {
+    const configuration = vscode.workspace.getConfiguration('fold');
+    const level = configuration.get('level', 1);
+
+    fold(level);
+  }
 }
 
 /**
