@@ -2,7 +2,7 @@
   "name": "vscode-fold",
   "displayName": "Fold",
   "description": "Visual Studio Code extension for automatic folding 🃏.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "repository": "github:felicio/vscode-fold",
   "publisher": "felicio",
   "license": "SEE LICENSE IN LICENSE",
