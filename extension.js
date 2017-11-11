@@ -39,6 +39,7 @@ function listener(activeDocument, previousDocuments) {
       const configuration = vscode.workspace.getConfiguration('fold');
       const level = configuration.get('level', 1);
 
+      setCursorPosition(editor);
       fold(level);
 
       return documents;
@@ -72,4 +73,11 @@ function isOpened(activeDocument, documents) {
 
     return document;
   }
+}
+
+/** Sets cursor position to the top of text document. */
+function setCursorPosition(editor) {
+  const position = new vscode.Position(0, 0);
+  const selection = new vscode.Selection(position, position);
+  editor.selection = selection;
 }
