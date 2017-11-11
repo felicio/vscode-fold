@@ -34,7 +34,7 @@
 			"properties": {
 				"fold.level": {
 					"type": "number",
-					"default": 1,
+					"default": 2,
 					"description": "Default fold level."
 				}
 			}

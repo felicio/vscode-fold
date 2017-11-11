@@ -37,7 +37,7 @@ function listener(activeDocument, previousDocuments) {
     // Ignore events emitted by go to symbol definition feature.
     if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
       const configuration = vscode.workspace.getConfiguration('fold');
-      const level = configuration.get('level', 1);
+      const level = configuration.get('level', 2);
 
       setCursorPosition(editor);
       fold(level);
