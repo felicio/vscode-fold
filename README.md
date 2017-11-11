@@ -1,2 +1,2 @@
 # Fold
-Visual Studio Code extension for automatic folding 🃏.
+Automatic folding of indented lines for Visual Studio Code

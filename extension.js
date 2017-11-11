@@ -34,7 +34,6 @@ function listener(activeDocument, previousDocuments) {
       return documents;
     }
 
-    // FIXME: Fold document opened in split view
     // Ignore events emitted by go to symbol definition feature.
     if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
       const configuration = vscode.workspace.getConfiguration('fold');
