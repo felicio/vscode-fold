@@ -1,50 +1,55 @@
 {
-  "author": {
-    "name": "Felicio Mununga"
-  },
-  "name": "vscode-fold",
-  "displayName": "Fold",
-  "description": "Automatic folding of indented lines for Visual Studio Code",
-  "version": "1.0.5",
-  "repository": "github:felicio/vscode-fold",
-  "publisher": "felicio",
-  "license": "SEE LICENSE IN LICENSE",
-  "engines": {
-    "vscode": "^1.3.0"
-  },
-  "categories": [
-    "Formatters",
-    "Other"
-  ],
-  "keywords": [
-    "auto-",
-    "folding",
-    "region",
-    "indent",
-    "vim"
-  ],
-  "qna": false,
-  "activationEvents": [
-    "*"
-  ],
-  "main": "./extension",
-  "contributes": {
-    "configuration": {
-      "title": "Fold Configuration",
-      "properties": {
-        "fold.level": {
-          "type": "number",
-          "default": 1,
-          "description": "Default fold level."
-        }
-      }
-    }
-  },
-  "scripts": {
-    "postinstall": "node ./node_modules/vscode/bin/install"
-  },
-  "devDependencies": {
-    "eslint": "^4.6.1",
-    "vscode": "^1.1.6"
-  }
+	"author": {
+		"name": "Felicio Mununga"
+	},
+	"name": "vscode-fold",
+	"displayName": "Fold",
+	"description": "Automatic folding of indented lines for Visual Studio Code",
+	"version": "1.0.5",
+	"repository": "github:felicio/vscode-fold",
+	"publisher": "felicio",
+	"license": "SEE LICENSE IN LICENSE",
+	"engines": {
+		"vscode": "^1.3.0"
+	},
+	"categories": [
+		"Formatters",
+		"Other"
+	],
+	"keywords": [
+		"auto-",
+		"folding",
+		"region",
+		"indent",
+		"vim"
+	],
+	"qna": false,
+	"activationEvents": [
+		"*"
+	],
+	"main": "./extension",
+	"contributes": {
+		"configuration": {
+			"title": "Fold Configuration",
+			"properties": {
+				"fold.level": {
+					"type": "number",
+					"default": 1,
+					"description": "Default fold level."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"eslint": "^4.6.1",
+		"vscode": "^1.1.6"
+	},
+	"__metadata": {
+		"id": "ede3921c-8fa4-43c7-b305-2c38a5766694",
+		"publisherDisplayName": "Felicio Mununga",
+		"publisherId": "25f0dc03-4b8c-49ac-bf77-1853c3ec9efa"
+	}
 }
