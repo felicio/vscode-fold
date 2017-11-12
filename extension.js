@@ -75,7 +75,9 @@ function isOpened(activeDocument, documents) {
   }
 }
 
-/** Sets cursor position to the top of text document. */
+/**
+ * Sets cursor position to the top of text document.
+ */
 function setCursorPosition(editor) {
   const position = new vscode.Position(0, 0);
   const selection = new vscode.Selection(position, position);
