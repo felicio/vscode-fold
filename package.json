@@ -6,7 +6,10 @@
 	"displayName": "Fold",
 	"description": "Automatic folding of indented lines for Visual Studio Code",
 	"version": "1.1.0",
-	"repository": "github:felicio/vscode-fold",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/felicio/vscode-fold.git"
+	},
 	"publisher": "felicio",
 	"license": "SEE LICENSE IN LICENSE",
 	"engines": {
