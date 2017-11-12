@@ -16,3 +16,11 @@ fold actions and their respective keybindings to really help you get the most ou
 - Fold (`⌥⌘[`) folds the innermost uncollapsed region at the cursor
 - Unfold All (`⌘K ⌘J`) unfolds all regions in the editor
 - Fold All (`⌘K ⌘0`) folds all region in the editor
+
+## Known issues
+
+> Note: With one exception, listed issues are challenging due to the fact them being rooted in the functionality VS Code extenisbility API exposes, or the lack thereof.
+
+- Folding does not apply on documents opened in Split Editor.
+- If document begins with a folding region (e.g. `package.json`) applicable fold level **cannot** be lower than `2`.
+- `jsconfig.json` experiences inconsistent folding behaviour. In majority of times the regions within won't be folded.
