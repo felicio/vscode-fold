@@ -32,6 +32,12 @@
 	],
 	"main": "./extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "fold.foldLevelDefault",
+				"title": "Fold Level Default"
+			}
+		],
 		"configuration": {
 			"title": "Fold Configuration",
 			"properties": {

@@ -4,7 +4,7 @@ Automatic folding of indented lines for Visual Studio Code
 ## About
 
 Once a text document is opened, this extension will automatically fold all indented lines
-to the default `fold.level` set in User Settings.
+to the default `fold.level` set in User Settings. Already opened documents can be folded to the default level with **Fold Level Default** command from **Command Palette**.
 
 ## Usage
 

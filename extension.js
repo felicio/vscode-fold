@@ -8,14 +8,24 @@ const MAX_FOLD_LEVEL = 9;
  * Activates extension on an emitted event. Invoked only once.
  */
 exports.activate = context => {
+  const foldCommand = vscode.commands.registerCommand(
+    'fold.foldLevelDefault',
+    () => {
+      const foldLevel = getFoldLevel();
+
+      fold(foldLevel);
+    }
+  );
+
   let documents = vscode.workspace.textDocuments;
+  const textDocumentListener = vscode.workspace.onDidOpenTextDocument(
+    document => {
+      const previousDocuments = documents;
+      documents = listener(document, previousDocuments);
+    }
+  );
 
-  const subscription = vscode.workspace.onDidOpenTextDocument(document => {
-    const previousDocuments = documents;
-    documents = listener(document, previousDocuments);
-  });
-
-  context.subscriptions.push(subscription);
+  context.subscriptions.push(foldCommand, textDocumentListener);
 };
 
 /**
@@ -36,11 +46,10 @@ function listener(activeDocument, previousDocuments) {
 
     // Ignore events emitted by go to symbol definition feature.
     if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
-      const configuration = vscode.workspace.getConfiguration('fold');
-      const level = configuration.get('level', 2);
+      const foldLevel = getFoldLevel();
 
       setCursorPosition(editor);
-      fold(level);
+      fold(foldLevel);
 
       return documents;
     }
@@ -52,11 +61,11 @@ function listener(activeDocument, previousDocuments) {
 /**
  * Recursively folds source code regions, except the region at the current cursor position.
  */
-function fold(level) {
+function fold(foldLevel) {
   vscode.commands.executeCommand('editor.unfoldAll');
-  vscode.commands.executeCommand(`editor.foldLevel${level}`);
+  vscode.commands.executeCommand(`editor.foldLevel${foldLevel}`);
 
-  for (let index = level + 1; index <= MAX_FOLD_LEVEL; index++) {
+  for (let index = foldLevel + 1; index <= MAX_FOLD_LEVEL; index++) {
     vscode.commands.executeCommand(`editor.foldLevel${index}`);
   }
 }
@@ -82,4 +91,14 @@ function setCursorPosition(editor) {
   const position = new vscode.Position(0, 0);
   const selection = new vscode.Selection(position, position);
   editor.selection = selection;
+}
+
+/**
+ * Gets default fold level.
+ */
+function getFoldLevel() {
+  const configuration = vscode.workspace.getConfiguration('fold');
+  const foldLevel = configuration.get('level', 2);
+
+  return foldLevel;
 }
