@@ -8,10 +8,10 @@ const MAX_FOLD_LEVEL = 9;
  * Activates extension on an emitted event. Invoked only once.
  */
 exports.activate = context => {
-  const foldCommand = vscode.commands.registerCommand(
+  const foldCommand = vscode.commands.registerTextEditorCommand(
     'fold.foldLevelDefault',
-    () => {
-      const foldLevel = getFoldLevel();
+    editor => {
+      const foldLevel = getFoldLevel(editor.document.uri);
 
       fold(foldLevel);
     }
@@ -21,7 +21,7 @@ exports.activate = context => {
   const textDocumentListener = vscode.workspace.onDidOpenTextDocument(
     document => {
       const previousDocuments = documents;
-      documents = listener(document, previousDocuments);
+      documents = foldTextDocument(document, previousDocuments);
     }
   );
 
@@ -31,7 +31,7 @@ exports.activate = context => {
 /**
  * Listens for text document `didOpen` event.
  */
-function listener(activeDocument, previousDocuments) {
+function foldTextDocument(activeDocument, previousDocuments) {
   const editor = vscode.window.activeTextEditor;
 
   if (editor) {
@@ -46,7 +46,7 @@ function listener(activeDocument, previousDocuments) {
 
     // Ignore events emitted by go to symbol definition feature.
     if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
-      const foldLevel = getFoldLevel();
+      const foldLevel = getFoldLevel(editor.document.uri);
 
       setCursorPosition(editor);
       fold(foldLevel);
@@ -96,9 +96,9 @@ function setCursorPosition(editor) {
 /**
  * Gets default fold level.
  */
-function getFoldLevel() {
-  const configuration = vscode.workspace.getConfiguration('fold');
-  const foldLevel = configuration.get('level', 2);
+function getFoldLevel(resourceUri) {
+  const configuration = vscode.workspace.getConfiguration('fold', resourceUri);
+  const foldLevel = configuration.get('level');
 
   return foldLevel;
 }

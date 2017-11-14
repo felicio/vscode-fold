@@ -44,7 +44,8 @@
 				"fold.level": {
 					"type": "number",
 					"default": 2,
-					"description": "Default fold level."
+					"description": "Default fold level",
+					"scope": "resource"
 				}
 			}
 		}
