@@ -18,44 +18,48 @@ exports.activate = context => {
   );
 
   let documents = vscode.workspace.textDocuments;
-  const textDocumentListener = vscode.workspace.onDidOpenTextDocument(
+
+  const openedTextDocumentListener = vscode.workspace.onDidOpenTextDocument(
     document => {
       const previousDocuments = documents;
       documents = foldTextDocument(document, previousDocuments);
     }
   );
 
-  context.subscriptions.push(foldCommand, textDocumentListener);
+  const closedTextDocumentListener = vscode.workspace.onDidCloseTextDocument(
+    document => {
+      if (document.uri.scheme === 'file') {
+        documents = vscode.workspace.textDocuments;
+      }
+    }
+  );
+
+  context.subscriptions.push(
+    foldCommand,
+    openedTextDocumentListener,
+    closedTextDocumentListener
+  );
 };
 
 /**
  * Listens for text document `didOpen` event.
  */
 function foldTextDocument(activeDocument, previousDocuments) {
-  const editor = vscode.window.activeTextEditor;
-
-  if (editor) {
+  if (activeDocument.uri.scheme === 'file') {
     const documents = vscode.workspace.textDocuments;
-    const activeFilePath = editor.document.fileName;
+    const editors = vscode.window.visibleTextEditors;
 
-    /* Don't fold when editor still holds a reference to the document,
-    but return state of currently opened text documents. */
-    if (isOpened(activeDocument, previousDocuments)) {
-      return documents;
-    }
+    // Ignore events emitted by Go to Symbol Definition feature.
+    /* TODO: Distinquish between document being opened by user or Go to Symbol.
+    Return if later applies. */
 
-    // Ignore events emitted by go to symbol definition feature.
-    if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
-      const foldLevel = getFoldLevel(editor.document.uri);
+    // Don't fold when editor still holds a reference to the document
+    // TODO: Fold document
 
-      setCursorPosition(editor);
-      fold(foldLevel);
-
-      return documents;
-    }
-
-    return previousDocuments;
+    return documents;
   }
+
+  return previousDocuments;
 }
 
 /**
@@ -68,29 +72,6 @@ function fold(foldLevel) {
   for (let index = foldLevel + 1; index <= MAX_FOLD_LEVEL; index++) {
     vscode.commands.executeCommand(`editor.foldLevel${index}`);
   }
-}
-
-/**
- * Checks if text document is open.
- */
-function isOpened(activeDocument, documents) {
-  if (documents) {
-    const document = documents.find(
-      document =>
-        document.fileName === activeDocument.fileName.replace(/\.git$/, '')
-    );
-
-    return document;
-  }
-}
-
-/**
- * Sets cursor position to the top of text document.
- */
-function setCursorPosition(editor) {
-  const position = new vscode.Position(0, 0);
-  const selection = new vscode.Selection(position, position);
-  editor.selection = selection;
 }
 
 /**
