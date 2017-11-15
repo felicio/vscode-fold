@@ -8,7 +8,7 @@ const MAX_FOLD_LEVEL = 9;
  * Activates extension on an emitted event. Invoked only once.
  */
 exports.activate = context => {
-  const foldCommand = vscode.commands.registerTextEditorCommand(
+  const registeredFoldCommand = vscode.commands.registerTextEditorCommand(
     'fold.foldLevelDefault',
     editor => {
       const foldLevel = getFoldLevel(editor.document.uri);
@@ -18,45 +18,31 @@ exports.activate = context => {
   );
 
   let documents = vscode.workspace.textDocuments;
-  const textDocumentListener = vscode.workspace.onDidOpenTextDocument(
-    document => {
-      const previousDocuments = documents;
-      documents = foldTextDocument(document, previousDocuments);
+
+  const changedVisibleTextEditorsListener = vscode.window.onDidChangeVisibleTextEditors(
+    editors => {
+      const activeTextEditor = vscode.window.activeTextEditor;
+
+      if (editors.length !== 0 && activeTextEditor) {
+        const activeTextDocument = activeTextEditor.document;
+
+        if (!documents.includes(activeTextDocument)) {
+          const foldLevel = getFoldLevel(activeTextDocument.uri);
+          activeTextEditor.selection = setCursorPosition();
+
+          fold(foldLevel);
+        }
+
+        documents = vscode.workspace.textDocuments;
+      }
     }
   );
 
-  context.subscriptions.push(foldCommand, textDocumentListener);
+  context.subscriptions.push(
+    registeredFoldCommand,
+    changedVisibleTextEditorsListener
+  );
 };
-
-/**
- * Listens for text document `didOpen` event.
- */
-function foldTextDocument(activeDocument, previousDocuments) {
-  const editor = vscode.window.activeTextEditor;
-
-  if (editor) {
-    const documents = vscode.workspace.textDocuments;
-    const activeFilePath = editor.document.fileName;
-
-    /* Don't fold when editor still holds a reference to the document,
-    but return state of currently opened text documents. */
-    if (isOpened(activeDocument, previousDocuments)) {
-      return documents;
-    }
-
-    // Ignore events emitted by go to symbol definition feature.
-    if (activeDocument.fileName.replace(/\.git$/, '') === activeFilePath) {
-      const foldLevel = getFoldLevel(editor.document.uri);
-
-      setCursorPosition(editor);
-      fold(foldLevel);
-
-      return documents;
-    }
-
-    return previousDocuments;
-  }
-}
 
 /**
  * Recursively folds source code regions, except the region at the current cursor position.
@@ -71,29 +57,6 @@ function fold(foldLevel) {
 }
 
 /**
- * Checks if text document is open.
- */
-function isOpened(activeDocument, documents) {
-  if (documents) {
-    const document = documents.find(
-      document =>
-        document.fileName === activeDocument.fileName.replace(/\.git$/, '')
-    );
-
-    return document;
-  }
-}
-
-/**
- * Sets cursor position to the top of text document.
- */
-function setCursorPosition(editor) {
-  const position = new vscode.Position(0, 0);
-  const selection = new vscode.Selection(position, position);
-  editor.selection = selection;
-}
-
-/**
  * Gets default fold level.
  */
 function getFoldLevel(resourceUri) {
@@ -101,4 +64,13 @@ function getFoldLevel(resourceUri) {
   const foldLevel = configuration.get('level');
 
   return foldLevel;
+}
+
+/**
+ * Returns empty selection positioned to beginning of text document.
+ */
+function setCursorPosition() {
+  const position = new vscode.Position(0, 0);
+
+  return new vscode.Selection(position, position);
 }
