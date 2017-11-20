@@ -23,12 +23,10 @@ of this extension.
 
 ## Known issues
 
-> **Note**: With one exception, listed issues are challenging due to the fact
+> **Note**: Listed issues are challenging due to the fact
 them being rooted in the functionality VS Code extenisbility API exposes, or
 the lack thereof.
 
-- Folding does not apply on documents opened in Split Editor.
+- Folding does not apply for documents that did **not** gain focus (e.g. Open to Side action triggered by `⌃Click`)
 - If document begins with a folding region (e.g. `package.json`) applicable
   fold level **cannot** be lower than `2`.
-- `jsconfig.json` experiences inconsistent folding behaviour. In majority of
-  times the regions within won't be folded.
