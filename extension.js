@@ -2,19 +2,10 @@
 
 const vscode = require('vscode');
 
-const MAX_FOLD_LEVEL = 9;
-
-/**
- * Activates extension on an emitted event. Invoked only once.
- */
 exports.activate = context => {
-  const registeredFoldCommand = vscode.commands.registerTextEditorCommand(
+  const registeredFoldingCommand = vscode.commands.registerTextEditorCommand(
     'fold.foldLevelDefault',
-    editor => {
-      const foldLevel = getFoldLevel(editor.document.uri);
-
-      fold(foldLevel);
-    }
+    editor => foldLevelDefault(editor.document.uri)
   );
 
   let documents = vscode.workspace.textDocuments;
@@ -27,10 +18,9 @@ exports.activate = context => {
         const activeTextDocument = activeTextEditor.document;
 
         if (!documents.includes(activeTextDocument)) {
-          const foldLevel = getFoldLevel(activeTextDocument.uri);
           activeTextEditor.selection = setCursorPosition();
 
-          fold(foldLevel);
+          foldLevelDefault(activeTextDocument.uri);
         }
 
         documents = vscode.workspace.textDocuments;
@@ -39,31 +29,24 @@ exports.activate = context => {
   );
 
   context.subscriptions.push(
-    registeredFoldCommand,
+    registeredFoldingCommand,
     changedVisibleTextEditorsListener
   );
 };
 
 /**
- * Recursively folds source code regions, except the region at the current cursor position.
+ * Folds regions of default level and all their inner regions.
+ * @param resourceUri
  */
-function fold(foldLevel) {
-  vscode.commands.executeCommand('editor.unfoldAll');
-  vscode.commands.executeCommand(`editor.foldLevel${foldLevel}`);
-
-  for (let index = foldLevel + 1; index <= MAX_FOLD_LEVEL; index++) {
-    vscode.commands.executeCommand(`editor.foldLevel${index}`);
-  }
-}
-
-/**
- * Gets default fold level.
- */
-function getFoldLevel(resourceUri) {
+function foldLevelDefault(resourceUri) {
   const configuration = vscode.workspace.getConfiguration('fold', resourceUri);
-  const foldLevel = configuration.get('level');
+  const level = configuration.get('level');
 
-  return foldLevel;
+  vscode.commands.executeCommand('editor.unfoldAll');
+  vscode.commands.executeCommand(`editor.foldLevel${level}`);
+  for (let i = level + 1; i <= 7; i++) {
+    vscode.commands.executeCommand(`editor.foldLevel${i}`);
+  }
 }
 
 /**
