@@ -1,2 +1,2 @@
-# Normalize line endings to LF
+# Set default behavior to automatically normalize line endings.
 * text=auto

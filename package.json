@@ -54,8 +54,8 @@
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
-		"eslint": "^4.6.1",
-		"vscode": "^1.1.6"
+		"eslint": "^4.11.0",
+		"vscode": "^1.1.21"
 	},
 	"__metadata": {
 		"id": "ede3921c-8fa4-43c7-b305-2c38a5766694",
