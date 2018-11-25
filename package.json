@@ -39,7 +39,7 @@
 			}
 		],
 		"configuration": {
-			"title": "Fold Configuration",
+			"title": "Fold",
 			"properties": {
 				"fold.level": {
 					"type": "number",

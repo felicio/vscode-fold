@@ -8,6 +8,12 @@ indented lines to the default `fold.level` set in User Settings. Already
 opened documents can be folded to the default level with **Fold Level
 Default** command from **Command Palette**.
 
+## Features
+
+- Automatic folding
+- Fold Level Default command
+
+
 ## Usage
 
 Team @code does host a decent documentation suite and
@@ -16,17 +22,10 @@ chapter is a good example of it. Below is an extract of available fold
 actions and their respective keybindings to really help you get the most out
 of this extension.
 
-- Unfold (`⌥⌘]`) unfolds the collapsed region at the cursor
 - Fold (`⌥⌘[`) folds the innermost uncollapsed region at the cursor
-- Unfold All (`⌘K ⌘J`) unfolds all regions in the editor
+- Unfold (`⌥⌘]`) unfolds the collapsed region at the cursor
 - Fold All (`⌘K ⌘0`) folds all region in the editor
-
-## Known issues
-
-> **Note**: Listed issues are challenging due to the fact
-them being rooted in the functionality VS Code extenisbility API exposes, or
-the lack thereof.
-
-- Folding does not apply for documents that did **not** gain focus (e.g. Open to Side action triggered by `⌃Click`)
-- If document begins with a folding region (e.g. `package.json`) applicable
-  fold level **cannot** be lower than `2`.
+- Unfold All (`⌘K ⌘J`) unfolds all regions in the editor
+- Fold All Block Comments (`⌘K ⌘/`) folds all regions that start with a block comment token
+- Fold Marker Regions (`⌘K ⌘8`) folds all marker regions
+- Unfold Marker Regions (`⌘K ⌘9`) unfolds all marker regions

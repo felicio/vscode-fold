@@ -6,6 +6,7 @@ jsconfig.json
 vsc-extension-quickstart.md
 .eslintrc.js
 .todo
+.checklist
 .gitattributes
 .prettierrc
 .editorconfig

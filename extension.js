@@ -18,8 +18,6 @@ exports.activate = context => {
         const activeTextDocument = activeTextEditor.document;
 
         if (!documents.includes(activeTextDocument)) {
-          activeTextEditor.selection = setCursorPosition();
-
           foldLevelDefault(activeTextDocument.uri);
         }
 
@@ -35,25 +33,19 @@ exports.activate = context => {
 };
 
 /**
- * Folds regions of default level and all their inner regions.
+ * Folds regions of default level and all their inner regions up to level 7.
  * @param resourceUri
  */
 function foldLevelDefault(resourceUri) {
   const configuration = vscode.workspace.getConfiguration('fold', resourceUri);
-  const level = configuration.get('level');
+  let level = configuration.get('level');
+
+  if (level <= 0 || level > 7) {
+    level = 2 // Extension default set in package.json
+  }
 
   vscode.commands.executeCommand('editor.unfoldAll');
-  vscode.commands.executeCommand(`editor.foldLevel${level}`);
-  for (let i = level + 1; i <= 7; i++) {
+  for (let i = level; i <= 7; i++) {
     vscode.commands.executeCommand(`editor.foldLevel${i}`);
   }
-}
-
-/**
- * Returns empty selection positioned to beginning of text document.
- */
-function setCursorPosition() {
-  const position = new vscode.Position(0, 0);
-
-  return new vscode.Selection(position, position);
 }
