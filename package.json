@@ -1,7 +1,7 @@
 {
 	"name": "vscode-fold",
-	"displayName": "VS Code Automatic Folding",
-	"description": "Automatic folding of indented lines for Visual Studio Code",
+	"displayName": "Fold",
+	"description": "Auto-folding of indented lines for Visual Studio Code",
 	"version": "1.4.2",
 	"repository": {
 		"type": "git",

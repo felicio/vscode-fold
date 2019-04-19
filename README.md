@@ -1,5 +1,5 @@
-# VS Code Automatic Folding
-Automatic folding of indented lines for Visual Studio Code
+# VS Code Fold
+Auto-folding of indented lines for Visual Studio Code
 
 ## About
 
@@ -10,7 +10,7 @@ Default** command from **Command Palette**.
 
 ## Features
 
-- Automatic folding
+- Auto-folding
 - Fold Level Default command
 
 
