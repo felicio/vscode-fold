@@ -1,4 +1,4 @@
-# Fold
+# VS Code Automatic Folding
 Automatic folding of indented lines for Visual Studio Code
 
 ## About
