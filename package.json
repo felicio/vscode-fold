@@ -1,9 +1,6 @@
 {
-	"author": {
-		"name": "Felicio Mununga"
-	},
 	"name": "vscode-fold",
-	"displayName": "Fold",
+	"displayName": "VS Code Automatic Folding",
 	"description": "Automatic folding of indented lines for Visual Studio Code",
 	"version": "1.4.0",
 	"repository": {
@@ -16,16 +13,19 @@
 		"vscode": "^1.18.0"
 	},
 	"categories": [
-		"Formatters",
 		"Other"
 	],
 	"keywords": [
-		"auto-",
-		"folding",
+		"auto",
+		"fold",
 		"region",
 		"indent",
 		"vim"
 	],
+	"galleryBanner": {
+		"color": "#007acc",
+		"theme": "dark"
+	},
 	"qna": false,
 	"activationEvents": [
 		"*"
